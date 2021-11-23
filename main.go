@@ -1,27 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"io"
 	"log"
 	"os"
 
 	"github.com/urfave/cli/v2"
+	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/transform"
 )
 
 func main() {
-	enableBom := false
-
 	app := &cli.App{
 		Usage: "Change charset shift-jis -> utf-8",
-		Flags: []cli.Flag{
-			&cli.BoolFlag{
-				Name:        "b",
-				Usage:       "global b-option",
-				Destination: &enableBom,
-			},
-		},
 		Action: func(c *cli.Context) error {
-			fmt.Println("Hello World!")
+			reader := transform.NewReader(os.Stdin, japanese.ShiftJIS.NewDecoder())
+			if _, err := io.Copy(os.Stdout, reader); err != nil {
+				return err
+			}
 			return nil
 		},
 	}
