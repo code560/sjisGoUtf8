@@ -1,4 +1,4 @@
-module github.com/code560/sjis2utf8
+module github.com/code560/sjisGoUtf8
 
 go 1.17
 
